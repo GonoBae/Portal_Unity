@@ -1,3 +1,13 @@
+// OpenGL & Unity => {
+//                      (0, 1), (1, 1)
+//                      (0, 0), (1, 0)
+//                   }
+
+// Unreal & DirectX => {
+//                      (0, 0), (1, 0)
+//                      (0, 1), (1, 1)
+//                   }
+
 Shader "Custom/Portal"
 {
     Properties
@@ -35,11 +45,13 @@ Shader "Custom/Portal"
             // (데이터가 온전히 넘어가는 것이 아닌 해당 픽셀 위치에 맞추어 자연스럽게 보간된 데이터를 내려줌)
             struct v2f // 새로운 유형의 변수를 정의, 구조체는 네이티브 데이터보다 더 많은 데이터가 필요할 때 사용
             {
-                float4 vertex : SV_POSITION;
+                // 공간 포지션을 출력해 GPU에 화면의 어느 부분을 어느 뎁스로 래스터화할지
+                float4 vertex : SV_POSITION; // clip space position output
                 // uv 를 받아오도록 정의
-                float4 screenPos : TEXCOORD0; // TEXCOORD0 : 1번째 UV coordinate
+                float4 screenPos : TEXCOORD0; // TEXCOORD0 : 1번째 UV coordinate, texture coordinate input
             };
-
+            // 입력부
+            // 텍스쳐는 UV 를 만나기 전까지 그냥 메모리에 올라와있는 텍스쳐일 뿐
             sampler2D _MainTex;
             float4 _InactiveColour;
             int displayMask; // set to 1 to display texture, otherwise will draw test colour
@@ -51,6 +63,7 @@ Shader "Custom/Portal"
                 // 정점의 로컬 좌표를 받아와서 투영 좌표로 변환해주는 작업
                 // 월드, 카메라, 투영 좌표로 변환하는 과정을 하나의 작업으로 줄인 것
                 o.vertex = UnityObjectToClipPos(v.vertex); // UnityCG.cginc 에서 정의
+                // 
                 o.screenPos = ComputeScreenPos(o.vertex); // UnityCG.cginc 에서 정의
                 return o;
             }
@@ -62,6 +75,7 @@ Shader "Custom/Portal"
             {
                 float2 uv = i.screenPos.xy / i.screenPos.w;
                 // 텍스처에서 색상 추출
+                // 첫번째 매개변수 : 샘플러, 두번째 매개변수 : UV
                 fixed4 portalCol = tex2D(_MainTex, uv);
                 return portalCol * displayMask + _InactiveColour * (1-displayMask);
             }
