@@ -33,10 +33,10 @@ Shader "Custom/Portal"
 
             // 정점 셰이더의 입력
             // 직접 할당하는 것이 아닌 구조체를 짜면 유니티가 알아서 값을 넣어줌
-            struct appdata
+            struct appdata // Mesh에 필요한 데이터 선언 구조체
             {
                 // 정점의 로컬 좌표계 위치
-                float4 vertex : POSITION; // POSITION : 정점위치
+                float4 vertex : POSITION; // POSITION : 정점위치 , (x, y, z, w)
             };
 
             // vertex to fragment 의 약자
@@ -48,6 +48,7 @@ Shader "Custom/Portal"
                 // 공간 포지션을 출력해 GPU에 화면의 어느 부분을 어느 뎁스로 래스터화할지
                 float4 vertex : SV_POSITION; // clip space position output
                 // uv 를 받아오도록 정의
+                // 텍스처 좌표 및 포지션과 같은 임의의 고정밀도 데이터를 나타낼 때 사용
                 float4 screenPos : TEXCOORD0; // TEXCOORD0 : 1번째 UV coordinate, texture coordinate input
             };
             // 입력부
@@ -56,12 +57,16 @@ Shader "Custom/Portal"
             float4 _InactiveColour;
             int displayMask; // set to 1 to display texture, otherwise will draw test colour
             
-
+            // 버텍스를 배치하기 위해서 Mesh Info가 필요함
+            // 매개변수가 있는 이유
             v2f vert (appdata v)
             {
+                // pixel shader 에 전달할 정보 초기화
                 v2f o;
                 // 정점의 로컬 좌표를 받아와서 투영 좌표로 변환해주는 작업
+                // 오브젝트 공간의 버텍스를 화면으로 변환하는 유틸리티 함수
                 // 월드, 카메라, 투영 좌표로 변환하는 과정을 하나의 작업으로 줄인 것
+                // 각 vertex를 화면에 배치함
                 o.vertex = UnityObjectToClipPos(v.vertex); // UnityCG.cginc 에서 정의
                 // 
                 o.screenPos = ComputeScreenPos(o.vertex); // UnityCG.cginc 에서 정의
