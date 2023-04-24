@@ -262,7 +262,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8a993b244c70f4ca2ce28cf7e5153e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  walkSpeed: 3
+  runSpeed: 6
+  smoothMoveTime: 0.1
+  jumpForce: 8
+  gravity: 18
+  lockCursor: 0
+  mouseSensitivity: 10
+  rotationSmoothTime: 0.1
+  yaw: 0
 --- !u!1 &1673021148
 GameObject:
   m_ObjectHideFlags: 0

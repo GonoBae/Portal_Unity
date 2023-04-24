@@ -19,10 +19,20 @@ public class Portal : MonoBehaviour
     }
 
     public void Render() {
+
+        if(!CameraUtility.VisibleFromCamera(linkedPortal.screen, playerCam))
+        {
+            var testTexture = new Texture2D(1, 1);
+            testTexture.SetPixel(0, 0, Color.red);
+            testTexture.Apply();
+            linkedPortal.screen.material.SetTexture("_MainTex", testTexture);
+            return;
+        }
+
         screen.enabled = false;
         CreateViewTexture();
         portalCam.Render();
-        linkedPortal.screen.material.SetInt ("displayMask", 1);
+        linkedPortal.screen.material.SetTexture ("_MainTex", viewTexture);
         screen.enabled = true;
     }
 
