@@ -12,20 +12,45 @@ public class Portal : MonoBehaviour
     Camera portalCam;
     RenderTexture viewTexture;
 
+    List<PortalTraveller> trackedTravellers;
+
     private void Awake() {
         playerCam = Camera.main;
         portalCam = GetComponentInChildren<Camera>();
         portalCam.enabled = false;
+        trackedTravellers = new List<PortalTraveller>();
+    }
+
+    private void LateUpdate() {
+        HandleTravellers();
+    }
+
+    private void HandleTravellers() {
+        for(int i = 0; i < trackedTravellers.Count; i++) {
+            PortalTraveller traveller = trackedTravellers[i];
+            Transform travellerT = traveller.transform;
+            Vector3 offsetFromPortal = travellerT.position - transform.position;
+            int portalSide = System.Math.Sign(Vector3.Dot(offsetFromPortal, transform.forward));
+            int portalSideOld = System.Math.Sign(Vector3.Dot(traveller.previousOffsetFromPortal, transform.forward));
+            if(portalSide != portalSideOld)
+            {
+                var m = linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * travellerT.localToWorldMatrix;
+                traveller.Teleport(transform, linkedPortal.transform, m.GetColumn(3), m.rotation);
+                linkedPortal.OnTravellerEnterPortal(traveller);
+                trackedTravellers.RemoveAt (i);
+                i--;
+            }
+            else
+            {
+                traveller.previousOffsetFromPortal = offsetFromPortal;
+            }
+        }
     }
 
     public void Render() {
 
         if(!CameraUtility.VisibleFromCamera(linkedPortal.screen, playerCam))
         {
-            var testTexture = new Texture2D(1, 1);
-            testTexture.SetPixel(0, 0, Color.red);
-            testTexture.Apply();
-            linkedPortal.screen.material.SetTexture("_MainTex", testTexture);
             return;
         }
 
@@ -44,6 +69,32 @@ public class Portal : MonoBehaviour
             viewTexture = new RenderTexture(Screen.width, Screen.height, 0);
             portalCam.targetTexture = viewTexture;
             linkedPortal.screen.material.SetTexture("_MainTex", viewTexture);
+        }
+    }
+
+    private void OnTravellerEnterPortal(PortalTraveller traveller)
+    {
+        if(!trackedTravellers.Contains(traveller))
+        {
+            traveller.EnterPortalThreshold();
+            traveller.previousOffsetFromPortal = traveller.transform.position - transform.position;
+            trackedTravellers.Add(traveller);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        var traveller = other.GetComponent<PortalTraveller>();
+        if(traveller)
+        {
+            OnTravellerEnterPortal(traveller);
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        var traveller = other.GetComponent<PortalTraveller>();
+        if(traveller && trackedTravellers.Contains(traveller)) {
+            traveller.ExitPortalThreshold();
+            trackedTravellers.Remove(traveller);
         }
     }
 }

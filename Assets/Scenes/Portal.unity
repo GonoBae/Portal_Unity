@@ -338,6 +338,8 @@ GameObject:
   m_Component:
   - component: {fileID: 349903649}
   - component: {fileID: 349903650}
+  - component: {fileID: 349903652}
+  - component: {fileID: 349903651}
   m_Layer: 0
   m_Name: Forest Portal
   m_TagString: Untagged
@@ -376,6 +378,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedPortal: {fileID: 1536905068}
   screen: {fileID: 3136947866036185114}
+--- !u!65 &349903651
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349903648}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.2293906, y: 3.555551, z: 1}
+  m_Center: {x: 0.0053452253, y: 1.2777655, z: 0.00000005963034}
+--- !u!54 &349903652
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349903648}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &391464123
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,6 +721,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1536905067}
   - component: {fileID: 1536905068}
+  - component: {fileID: 1536905070}
+  - component: {fileID: 1536905069}
   m_Layer: 0
   m_Name: Desert Portal
   m_TagString: Untagged
@@ -728,6 +761,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedPortal: {fileID: 349903650}
   screen: {fileID: 790634508}
+--- !u!65 &1536905069
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536905066}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.289503, y: 3.0019982, z: 1.8648107}
+  m_Center: {x: -0.044860363, y: 1.3933154, z: 0.10103834}
+--- !u!54 &1536905070
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536905066}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1705069550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,8 +1306,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4626225081917513906, guid: efa5842d61cf2564ea02da91bd28aa23, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efa5842d61cf2564ea02da91bd28aa23, type: 3}
 --- !u!1 &4985983432349374288
 GameObject:
